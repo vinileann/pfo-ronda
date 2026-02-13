@@ -22,21 +22,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+  const storedToken = localStorage.getItem('token');
+  const storedUser = localStorage.getItem('user');
 
-    if (storedToken && storedUser && storedUser !== 'undefined') {
-      try {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Erro ao recuperar dados do localStorage:', error);
-        // Limpa dados corrompidos
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
+  if (storedToken && storedUser && storedUser !== 'undefined') {
+    try {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    } catch {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
-  }, []);
+  } else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+}, []);
+
 
   const login = async (login: string, senha: string) => {
     const data = await authService.login(login, senha);
