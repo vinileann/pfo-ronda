@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "client"
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["lovable"]
+}
+
+model AppsUsuarios {
+  id           String    @id @default(uuid())
+  nome         String?
+  email        String?
+  login        String?
+  senha        String?
+  cargo        String?
+  ci           Boolean?  @default(false)
+  pfo          Boolean?  @default(false)
+  comercial    Boolean?  @default(false)
+  data_criacao DateTime? @default(now()) @db.Date
+  area         String?
+  ronda        Boolean?  @default(false)
+
+  @@map("apps_usuarios")
+  @@schema("lovable")
+}
+
+model PfAlunos {
+  matricula String       @id
+  nome      String?
+  telefone  String?
+  plantoes  PfPlantoes[]
+
+  @@map("pf_alunos")
+  @@schema("lovable")
+}
+
+model PfPlantoes {
+  data_plantao  String
+  data_marcado  String?
+  matricula     String
+  nome          String?
+  telefone      String?
+  status        String?
+  moscow        String?
+
+  aluno         PfAlunos @relation(fields: [matricula], references: [matricula])
+
+  @@unique([matricula, data_plantao])
+  @@map("pf_plantoes")
+  @@schema("lovable")
+}
+
+model PfRondaAluno {
+  login                     String
+  matricula                 String
+  data_plantao              DateTime @db.Date
+  hora                      String
+  uti                       String?
+  procedimentos_reais       Int?
+  procedimentos_simulados   Int?
+  must_feito                Boolean? @default(false)
+  should_feito              Boolean? @default(false)
+  qtd_pacientes_avaliados   Int?
+  preceptor_acompanhou      Boolean? @default(false)
+  ociosidade                Int?
+  recebimento_de_plantao    Boolean? @default(false)
+
+  @@id([login, matricula, data_plantao, hora])
+  @@map("pf_ronda_aluno")
+  @@schema("lovable")
+}
+
+model PfRondaUti {
+  login                   String
+  data_plantao            DateTime @db.Date
+  hora                    String
+  uti                     String
+  preceptores             String[]
+  procedimentos_previstos Int?
+  procedimentos_reais     Int?
+
+  @@id([login, data_plantao, hora, uti])
+  @@map("pf_ronda_uti")
+  @@schema("lovable")
+}

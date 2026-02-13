@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /pfo-ronda/
+
+  # Redireciona /pfo-donda para /pfo-ronda/
+  RewriteCond %{REQUEST_URI} ^/pfo-donda(/.*)?$
+  RewriteRule ^(.*)$ /pfo-ronda/$1 [R=301,L]
+
+  # Se o arquivo ou diretório requisitado existe, serve-o diretamente
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Caso contrário, redireciona para index.html
+  RewriteRule . /pfo-ronda/index.html [L]
+</IfModule>

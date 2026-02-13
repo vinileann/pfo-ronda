@@ -1,0 +1,68 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": null,
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/pfo-donda/:path*",
+      "destination": "/pfo-ronda/:path*"
+    },
+    {
+      "source": "/pfo-ronda/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/pfo-ronda/:path*",
+      "destination": "/pfo-ronda/:path*"
+    },
+    {
+      "source": "/pfo-ronda",
+      "destination": "/pfo-ronda/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/pfo-donda",
+      "destination": "/pfo-ronda",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/pfo-ronda/api/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://lmedu.com.br"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "BASE_PATH": "/pfo-ronda"
+  }
+}
