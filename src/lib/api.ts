@@ -3,9 +3,7 @@ import axios from 'axios';
 // Detecta automaticamente o ambiente
 // Em desenvolvimento (localhost): usa /api que será proxied pelo Vite para http://localhost:3001/api
 // Em produção: usa /pfo-ronda/api que é servido pelo servidor web
-const API_URL = import.meta.env.DEV
-  ? '/api'
-  : '/pfo-ronda/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const api = axios.create({
   baseURL: API_URL,
